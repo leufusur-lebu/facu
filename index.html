@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+            margin-bottom: <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
@@ -45,9 +45,51 @@
 
         .menu-buttons {
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: repeat(3, 1fr);
             gap: 20px;
             margin-bottom: 30px;
+        }
+
+        .difficulty-selector {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .difficulty-label {
+            color: #667eea;
+            font-weight: bold;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+
+        .difficulty-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .diff-btn {
+            background: #f0f0f0;
+            border: 3px solid #ddd;
+            padding: 10px 22px;
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: bold;
+            color: #666;
+            transition: all 0.3s;
+        }
+
+        .diff-btn:hover {
+            background: #e0e0e0;
+            transform: scale(1.05);
+        }
+
+        .diff-btn.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-color: #667eea;
         }
 
         .activity-btn {
@@ -354,6 +396,80 @@
             font-weight: bold;
         }
 
+        /* Completar palabra */
+        .word-boxes {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin: 20px 0;
+        }
+
+        .letter-box {
+            width: 45px;
+            height: 55px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5em;
+            font-weight: bold;
+            border-radius: 10px;
+            text-transform: uppercase;
+        }
+
+        span.letter-box {
+            background: #f0f0f0;
+            color: #667eea;
+            border: 3px solid #ddd;
+        }
+
+        input.letter-box {
+            background: white;
+            border: 3px solid #667eea;
+            text-align: center;
+            color: #333;
+            padding: 0;
+            font-family: inherit;
+        }
+
+        input.letter-box.correct-box {
+            background: #84fab0;
+            border-color: #84fab0;
+            color: #333;
+        }
+
+        input.letter-box.incorrect-box {
+            background: #f5576c;
+            border-color: #f5576c;
+            color: white;
+        }
+
+        /* Escribir la palabra */
+        .spelling-input {
+            width: 100%;
+            max-width: 400px;
+            padding: 15px 20px;
+            font-size: 1.4em;
+            text-align: center;
+            border: 3px solid #667eea;
+            border-radius: 15px;
+            font-family: inherit;
+            margin: 10px auto 0;
+            display: block;
+        }
+
+        .spelling-input.correct-input {
+            background: #84fab0;
+            border-color: #84fab0;
+            color: #333;
+        }
+
+        .spelling-input.incorrect-input {
+            background: #f5576c;
+            border-color: #f5576c;
+            color: white;
+        }
+
         @media (max-width: 768px) {
             .menu-buttons {
                 grid-template-columns: 1fr;
@@ -367,6 +483,12 @@
             .header h1 {
                 font-size: 1.8em;
             }
+
+            .letter-box {
+                width: 36px;
+                height: 46px;
+                font-size: 1.2em;
+            }
         }
     </style>
 </head>
@@ -379,6 +501,14 @@
 
         <!-- Menu Principal -->
         <div id="menu" class="activity-section active">
+            <div class="difficulty-selector">
+                <p class="difficulty-label">Nivel de dificultad</p>
+                <div class="difficulty-buttons">
+                    <button class="diff-btn active" data-level="easy" onclick="setDifficulty('easy')">😊 Fácil</button>
+                    <button class="diff-btn" data-level="medium" onclick="setDifficulty('medium')">🙂 Medio</button>
+                    <button class="diff-btn" data-level="hard" onclick="setDifficulty('hard')">😎 Difícil</button>
+                </div>
+            </div>
             <div class="menu-buttons">
                 <button class="activity-btn" onclick="startActivity('learn')">
                     <span class="emoji">📚</span>
@@ -391,6 +521,14 @@
                 <button class="activity-btn" onclick="startActivity('quiz')">
                     <span class="emoji">❓</span>
                     <span>Quiz</span>
+                </button>
+                <button class="activity-btn" onclick="startActivity('complete')">
+                    <span class="emoji">🧩</span>
+                    <span>Completar</span>
+                </button>
+                <button class="activity-btn" onclick="startActivity('spelling')">
+                    <span class="emoji">✏️</span>
+                    <span>Escribir</span>
                 </button>
                 <button class="activity-btn" onclick="startActivity('drawing')">
                     <span class="emoji">🎨</span>
@@ -512,6 +650,44 @@
             <button class="submit-btn" onclick="nextQuestion()" id="nextBtn" style="display: none;">Siguiente →</button>
         </div>
 
+        <!-- Actividad: Completar la palabra -->
+        <div id="complete" class="activity-section">
+            <button class="back-btn" onclick="goBack()">← Volver</button>
+            <h2 style="color: #667eea; margin-bottom: 20px;">🧩 Completa la Palabra</h2>
+            <p style="color: #666; margin-bottom: 20px; font-size: 1.1em;">¡Completa las letras que faltan en inglés!</p>
+
+            <div class="progress" id="completeProgress"></div>
+
+            <div class="quiz-question">
+                <div class="question-image" id="completeImage"></div>
+                <div class="question-text" id="completeSpanish"></div>
+                <div class="word-boxes" id="completeBoxes"></div>
+            </div>
+
+            <div class="feedback" id="completeFeedback"></div>
+            <button class="submit-btn" onclick="checkComplete()" id="checkCompleteBtn">Verificar</button>
+            <button class="submit-btn" onclick="nextComplete()" id="nextCompleteBtn" style="display: none;">Siguiente →</button>
+        </div>
+
+        <!-- Actividad: Escribir la palabra -->
+        <div id="spelling" class="activity-section">
+            <button class="back-btn" onclick="goBack()">← Volver</button>
+            <h2 style="color: #667eea; margin-bottom: 20px;">✏️ Escribe la Palabra</h2>
+            <p style="color: #666; margin-bottom: 20px; font-size: 1.1em;">¡Escribe la palabra en inglés con el teclado!</p>
+
+            <div class="progress" id="spellingProgress"></div>
+
+            <div class="quiz-question">
+                <div class="question-image" id="spellingImage"></div>
+                <div class="question-text" id="spellingHint"></div>
+                <input type="text" id="spellingInput" class="spelling-input" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Escribe en inglés...">
+            </div>
+
+            <div class="feedback" id="spellingFeedback"></div>
+            <button class="submit-btn" onclick="checkSpelling()" id="checkSpellingBtn">Verificar</button>
+            <button class="submit-btn" onclick="nextSpelling()" id="nextSpellingBtn" style="display: none;">Siguiente →</button>
+        </div>
+
         <!-- Actividad: Dibujar -->
         <div id="drawing" class="activity-section">
             <button class="back-btn" onclick="goBack()">← Volver</button>
@@ -549,9 +725,19 @@
         };
 
         const allVocab = [...vocabulary.face, ...vocabulary.body];
-        let matchingState = { selected: null, pairs: [] };
+        let matchingState = { selected: null, pairs: [], pool: [] };
         let quizState = { index: 0, correct: 0, questions: [] };
         let drawingState = { index: 0, correct: 0 };
+        let completeState = { index: 0, correct: 0, words: [] };
+        let spellingState = { index: 0, correct: 0, words: [] };
+        let currentDifficulty = 'easy';
+
+        function setDifficulty(level) {
+            currentDifficulty = level;
+            document.querySelectorAll('.diff-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.level === level);
+            });
+        }
 
         function startActivity(activity) {
             document.querySelectorAll('.activity-section').forEach(el => el.classList.remove('active'));
@@ -560,6 +746,8 @@
             if (activity === 'matching') initMatching();
             if (activity === 'quiz') initQuiz();
             if (activity === 'drawing') initDrawing();
+            if (activity === 'complete') initComplete();
+            if (activity === 'spelling') initSpelling();
         }
 
         function goBack() {
@@ -568,27 +756,44 @@
         }
 
         // Matching Game
+        function getMatchingPairCount() {
+            if (currentDifficulty === 'easy') return 6;
+            if (currentDifficulty === 'medium') return 9;
+            return 12;
+        }
+
         function initMatching() {
-            matchingState = { selected: null, pairs: [] };
-            const shuffled = [...allVocab].sort(() => Math.random() - 0.5);
+            const pairCount = Math.min(getMatchingPairCount(), allVocab.length);
+            const pool = [...allVocab].sort(() => Math.random() - 0.5).slice(0, pairCount);
+            matchingState = { selected: null, pairs: [], pool };
+
+            // Cada columna se mezcla por separado para que las palabras NO
+            // queden alineadas en la misma fila (si no, el juego sería trivial).
+            const englishOrder = pool.map((_, i) => i).sort(() => Math.random() - 0.5);
+            const spanishOrder = pool.map((_, i) => i).sort(() => Math.random() - 0.5);
+
             const englishContainer = document.getElementById('englishWords');
             const spanishContainer = document.getElementById('spanishWords');
-            
+
             englishContainer.innerHTML = '';
             spanishContainer.innerHTML = '';
 
-            shuffled.forEach((word, index) => {
+            englishOrder.forEach(poolIndex => {
+                const word = pool[poolIndex];
                 const engBtn = document.createElement('div');
                 engBtn.className = 'matching-item';
                 engBtn.textContent = word.eng;
-                engBtn.dataset.index = index;
+                engBtn.dataset.index = poolIndex;
                 engBtn.onclick = () => selectMatchingItem(engBtn, 'eng');
                 englishContainer.appendChild(engBtn);
+            });
 
+            spanishOrder.forEach(poolIndex => {
+                const word = pool[poolIndex];
                 const spaBtn = document.createElement('div');
                 spaBtn.className = 'matching-item';
                 spaBtn.textContent = word.spa;
-                spaBtn.dataset.index = index;
+                spaBtn.dataset.index = poolIndex;
                 spaBtn.onclick = () => selectMatchingItem(spaBtn, 'spa');
                 spanishContainer.appendChild(spaBtn);
             });
@@ -615,7 +820,7 @@
                     matchingState.pairs.push(selectedIndex);
                     matchingState.selected = null;
 
-                    if (matchingState.pairs.length === allVocab.length) {
+                    if (matchingState.pairs.length === matchingState.pool.length) {
                         setTimeout(() => {
                             alert('¡🎉 ¡Excelente! ¡Lo hiciste perfecto!');
                             initMatching();
@@ -631,8 +836,8 @@
         }
 
         function updateMatchingProgress() {
-            document.getElementById('matchingProgress').textContent = 
-                `Parejas correctas: ${matchingState.pairs.length} / ${allVocab.length}`;
+            document.getElementById('matchingProgress').textContent =
+                `Parejas correctas: ${matchingState.pairs.length} / ${matchingState.pool.length}`;
         }
 
         function resetMatching() {
@@ -646,8 +851,9 @@
         }
 
         function generateQuizQuestions() {
+            const optionCount = currentDifficulty === 'easy' ? 2 : currentDifficulty === 'medium' ? 3 : 4;
             return allVocab.map(word => {
-                const wrong = allVocab.filter(w => w.eng !== word.eng).sort(() => Math.random() - 0.5).slice(0, 3);
+                const wrong = allVocab.filter(w => w.eng !== word.eng).sort(() => Math.random() - 0.5).slice(0, optionCount - 1);
                 const options = [word.spa, ...wrong.map(w => w.spa)].sort(() => Math.random() - 0.5);
                 return { question: word.eng, emoji: word.emoji, correct: word.spa, options, spa: word.spa };
             }).sort(() => Math.random() - 0.5);
@@ -739,6 +945,215 @@
             feedback.textContent = '¡Muy bien! ¡Correcto! 🌟';
             drawingState.correct++;
         }
+
+        // Completar la Palabra
+        function pickBlankIndices(len) {
+            const candidates = [];
+            for (let i = 1; i < len; i++) candidates.push(i); // la primera letra siempre queda visible como pista
+            candidates.sort(() => Math.random() - 0.5);
+
+            let count;
+            if (currentDifficulty === 'easy') count = 1;
+            else if (currentDifficulty === 'medium') count = Math.max(1, Math.ceil(candidates.length / 2));
+            else count = candidates.length;
+
+            count = Math.min(count, candidates.length);
+            return new Set(candidates.slice(0, count));
+        }
+
+        function initComplete() {
+            completeState = { index: 0, correct: 0, words: [...allVocab].sort(() => Math.random() - 0.5) };
+            showCompleteQuestion();
+        }
+
+        function showCompleteQuestion() {
+            if (completeState.index >= completeState.words.length) {
+                showCompleteResult();
+                return;
+            }
+
+            const word = completeState.words[completeState.index];
+            document.getElementById('completeImage').textContent = word.emoji;
+            document.getElementById('completeSpanish').textContent = `Pista: ${word.spa}`;
+            document.getElementById('completeProgress').textContent =
+                `Palabra ${completeState.index + 1} de ${completeState.words.length}`;
+            document.getElementById('completeFeedback').classList.remove('show', 'correct', 'incorrect');
+            document.getElementById('checkCompleteBtn').style.display = 'inline-block';
+            document.getElementById('nextCompleteBtn').style.display = 'none';
+
+            const eng = word.eng;
+            const blanks = pickBlankIndices(eng.length);
+            const boxesContainer = document.getElementById('completeBoxes');
+            boxesContainer.innerHTML = '';
+
+            for (let i = 0; i < eng.length; i++) {
+                if (blanks.has(i)) {
+                    const input = document.createElement('input');
+                    input.type = 'text';
+                    input.maxLength = 1;
+                    input.className = 'letter-box';
+                    input.dataset.correct = eng[i].toLowerCase();
+                    input.addEventListener('input', handleBoxInput);
+                    input.addEventListener('keydown', handleBoxKeydown);
+                    boxesContainer.appendChild(input);
+                } else {
+                    const span = document.createElement('span');
+                    span.className = 'letter-box';
+                    span.textContent = eng[i];
+                    boxesContainer.appendChild(span);
+                }
+            }
+
+            const firstInput = boxesContainer.querySelector('input');
+            if (firstInput) firstInput.focus();
+        }
+
+        function handleBoxInput(e) {
+            const el = e.target;
+            el.value = el.value.slice(0, 1);
+            if (el.value) {
+                const inputs = Array.from(document.querySelectorAll('#completeBoxes input.letter-box'));
+                const idx = inputs.indexOf(el);
+                if (idx < inputs.length - 1) inputs[idx + 1].focus();
+            }
+        }
+
+        function handleBoxKeydown(e) {
+            if (e.key === 'Backspace' && !e.target.value) {
+                const inputs = Array.from(document.querySelectorAll('#completeBoxes input.letter-box'));
+                const idx = inputs.indexOf(e.target);
+                if (idx > 0) inputs[idx - 1].focus();
+            } else if (e.key === 'Enter') {
+                e.preventDefault();
+                const checkBtn = document.getElementById('checkCompleteBtn');
+                const nextBtn = document.getElementById('nextCompleteBtn');
+                if (checkBtn.style.display !== 'none') checkComplete();
+                else if (nextBtn.style.display !== 'none') nextComplete();
+            }
+        }
+
+        function checkComplete() {
+            const inputs = document.querySelectorAll('#completeBoxes input.letter-box');
+            let allCorrect = inputs.length > 0;
+
+            inputs.forEach(inp => {
+                const val = inp.value.trim().toLowerCase();
+                if (val === inp.dataset.correct) {
+                    inp.classList.add('correct-box');
+                    inp.classList.remove('incorrect-box');
+                } else {
+                    inp.classList.add('incorrect-box');
+                    inp.classList.remove('correct-box');
+                    allCorrect = false;
+                }
+                inp.disabled = true;
+            });
+
+            const feedback = document.getElementById('completeFeedback');
+            if (allCorrect) {
+                feedback.classList.add('show', 'correct');
+                feedback.textContent = '¡Perfecto! 🎉';
+                completeState.correct++;
+            } else {
+                const word = completeState.words[completeState.index];
+                feedback.classList.add('show', 'incorrect');
+                feedback.textContent = `Casi... la palabra es: ${word.eng}`;
+            }
+
+            document.getElementById('checkCompleteBtn').style.display = 'none';
+            document.getElementById('nextCompleteBtn').style.display = 'inline-block';
+        }
+
+        function nextComplete() {
+            completeState.index++;
+            showCompleteQuestion();
+        }
+
+        function showCompleteResult() {
+            const total = completeState.words.length;
+            alert(`¡Terminaste! Completaste correctamente ${completeState.correct} de ${total} palabras 🌟`);
+            initComplete();
+        }
+
+        // Escribir la Palabra
+        function initSpelling() {
+            spellingState = { index: 0, correct: 0, words: [...allVocab].sort(() => Math.random() - 0.5) };
+            showSpellingQuestion();
+        }
+
+        function showSpellingQuestion() {
+            if (spellingState.index >= spellingState.words.length) {
+                showSpellingResult();
+                return;
+            }
+
+            const word = spellingState.words[spellingState.index];
+            document.getElementById('spellingImage').textContent = word.emoji;
+
+            let hintText;
+            if (currentDifficulty === 'easy') {
+                hintText = `Pista: ${word.spa} — empieza con "${word.eng[0].toUpperCase()}"`;
+            } else if (currentDifficulty === 'medium') {
+                hintText = `Pista: ${word.spa}`;
+            } else {
+                hintText = '¿Cómo se escribe esta palabra en inglés?';
+            }
+            document.getElementById('spellingHint').textContent = hintText;
+            document.getElementById('spellingProgress').textContent =
+                `Palabra ${spellingState.index + 1} de ${spellingState.words.length}`;
+
+            const input = document.getElementById('spellingInput');
+            input.value = '';
+            input.disabled = false;
+            input.className = 'spelling-input';
+            document.getElementById('spellingFeedback').classList.remove('show', 'correct', 'incorrect');
+            document.getElementById('checkSpellingBtn').style.display = 'inline-block';
+            document.getElementById('nextSpellingBtn').style.display = 'none';
+            input.focus();
+        }
+
+        function checkSpelling() {
+            const word = spellingState.words[spellingState.index];
+            const input = document.getElementById('spellingInput');
+            const val = input.value.trim().toLowerCase();
+            const feedback = document.getElementById('spellingFeedback');
+            input.disabled = true;
+
+            if (val === word.eng.toLowerCase()) {
+                input.classList.add('correct-input');
+                feedback.classList.add('show', 'correct');
+                feedback.textContent = '¡Excelente! 🎉';
+                spellingState.correct++;
+            } else {
+                input.classList.add('incorrect-input');
+                feedback.classList.add('show', 'incorrect');
+                feedback.textContent = `La palabra correcta es: ${word.eng}`;
+            }
+
+            document.getElementById('checkSpellingBtn').style.display = 'none';
+            document.getElementById('nextSpellingBtn').style.display = 'inline-block';
+        }
+
+        function nextSpelling() {
+            spellingState.index++;
+            showSpellingQuestion();
+        }
+
+        function showSpellingResult() {
+            const total = spellingState.words.length;
+            alert(`¡Terminaste! Escribiste correctamente ${spellingState.correct} de ${total} palabras 🌟`);
+            initSpelling();
+        }
+
+        document.getElementById('spellingInput').addEventListener('keydown', function (e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                const checkBtn = document.getElementById('checkSpellingBtn');
+                const nextBtn = document.getElementById('nextSpellingBtn');
+                if (checkBtn.style.display !== 'none') checkSpelling();
+                else if (nextBtn.style.display !== 'none') nextSpelling();
+            }
+        });
     </script>
 </body>
 </html>
