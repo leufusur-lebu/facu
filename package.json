@@ -4,7 +4,7 @@
   "description": "Aplicación interactiva para que Facundo aprenda inglés - Partes de la cara y cuerpo",
   "author": "Jonathan Rodriguez",
   "scripts": {
-    "start": "npx http-server -p $PORT -c-1"
+    "start": "npx http-server -p ${PORT:-3000} -c-1"
   },
   "dependencies": {
     "http-server": "^14.1.1"
