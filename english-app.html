@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌟 English Learning - Face & Body Parts</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Comic Sans MS', 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 30px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            color: #667eea;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #666;
+            font-size: 1.2em;
+        }
+
+        .menu-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .activity-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 30px 20px;
+            border-radius: 20px;
+            font-size: 1.3em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .activity-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+        }
+
+        .activity-btn.active {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+
+        .emoji {
+            font-size: 2em;
+        }
+
+        .activity-section {
+            display: none;
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        .activity-section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .back-btn {
+            background: #999;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1em;
+            margin-bottom: 20px;
+            transition: background 0.3s;
+        }
+
+        .back-btn:hover {
+            background: #666;
+        }
+
+        /* Learning Section */
+        .vocabulary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .vocab-card {
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+            border: 3px solid #ff9a56;
+        }
+
+        .vocab-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 25px rgba(255, 154, 86, 0.3);
+        }
+
+        .vocab-card.head {
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+        }
+
+        .vocab-card.body {
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+        }
+
+        .vocab-icon {
+            font-size: 3em;
+            margin-bottom: 10px;
+        }
+
+        .vocab-english {
+            font-size: 1.4em;
+            font-weight: bold;
+            color: #333;
+            margin: 10px 0;
+        }
+
+        .vocab-spanish {
+            font-size: 1.1em;
+            color: #666;
+        }
+
+        /* Matching Game */
+        .matching-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .matching-column {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .matching-item {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            cursor: pointer;
+            text-align: center;
+            font-weight: bold;
+            font-size: 1.1em;
+            transition: transform 0.3s, box-shadow 0.3s;
+            border: 3px solid transparent;
+        }
+
+        .matching-item:hover {
+            transform: scale(1.05);
+        }
+
+        .matching-item.selected {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            border-color: #fff;
+            box-shadow: 0 0 20px rgba(245, 87, 108, 0.5);
+        }
+
+        .matching-item.correct {
+            background: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%);
+            pointer-events: none;
+        }
+
+        .label {
+            font-size: 0.9em;
+            opacity: 0.8;
+            margin-bottom: 10px;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        /* Quiz */
+        .quiz-question {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .question-text {
+            font-size: 1.5em;
+            color: #333;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        .question-image {
+            font-size: 4em;
+            margin-bottom: 20px;
+        }
+
+        .quiz-options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .quiz-option {
+            background: #f0f0f0;
+            border: 3px solid #ddd;
+            padding: 20px;
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 1.2em;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .quiz-option:hover {
+            background: #e0e0e0;
+            transform: scale(1.05);
+        }
+
+        .quiz-option.selected {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+
+        .quiz-option.correct {
+            background: #84fab0;
+            border-color: #84fab0;
+            color: white;
+        }
+
+        .quiz-option.incorrect {
+            background: #f5576c;
+            border-color: #f5576c;
+            color: white;
+        }
+
+        /* Drawing */
+        .drawing-section {
+            text-align: center;
+        }
+
+        .body-drawing {
+            font-size: 5em;
+            margin: 30px 0;
+            cursor: pointer;
+        }
+
+        .part-highlight {
+            display: inline-block;
+            background: #ffeb3b;
+            padding: 5px 10px;
+            border-radius: 10px;
+            margin-top: 20px;
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%);
+            color: #333;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 15px;
+            font-size: 1.2em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+            margin-top: 20px;
+        }
+
+        .submit-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 25px rgba(132, 250, 176, 0.4);
+        }
+
+        .feedback {
+            margin-top: 20px;
+            padding: 20px;
+            border-radius: 15px;
+            font-size: 1.3em;
+            font-weight: bold;
+            display: none;
+        }
+
+        .feedback.show {
+            display: block;
+            animation: slideIn 0.5s ease-in;
+        }
+
+        .feedback.correct {
+            background: #84fab0;
+            color: #333;
+        }
+
+        .feedback.incorrect {
+            background: #f5576c;
+            color: white;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateY(-20px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .progress {
+            text-align: center;
+            color: #667eea;
+            font-size: 1.1em;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        @media (max-width: 768px) {
+            .menu-buttons {
+                grid-template-columns: 1fr;
+            }
+
+            .matching-container {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .header h1 {
+                font-size: 1.8em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🌟 English Learning 🌟</h1>
+            <p>¡Aprende las partes del cuerpo en inglés!</p>
+        </div>
+
+        <!-- Menu Principal -->
+        <div id="menu" class="activity-section active">
+            <div class="menu-buttons">
+                <button class="activity-btn" onclick="startActivity('learn')">
+                    <span class="emoji">📚</span>
+                    <span>Aprender</span>
+                </button>
+                <button class="activity-btn" onclick="startActivity('matching')">
+                    <span class="emoji">🎮</span>
+                    <span>Emparejar</span>
+                </button>
+                <button class="activity-btn" onclick="startActivity('quiz')">
+                    <span class="emoji">❓</span>
+                    <span>Quiz</span>
+                </button>
+                <button class="activity-btn" onclick="startActivity('drawing')">
+                    <span class="emoji">🎨</span>
+                    <span>Dibujar</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Actividad: Aprender -->
+        <div id="learn" class="activity-section">
+            <button class="back-btn" onclick="goBack()">← Volver</button>
+            <h2 style="color: #667eea; margin-bottom: 20px;">📚 Aprender Vocabulario</h2>
+            
+            <h3 style="color: #f5576c; margin: 20px 0 15px 0;">Partes de la Cara - Face Parts</h3>
+            <div class="vocabulary-grid" id="headVocab">
+                <div class="vocab-card head">
+                    <div class="vocab-icon">👀</div>
+                    <div class="vocab-english">Eye</div>
+                    <div class="vocab-spanish">Ojo</div>
+                </div>
+                <div class="vocab-card head">
+                    <div class="vocab-icon">👃</div>
+                    <div class="vocab-english">Nose</div>
+                    <div class="vocab-spanish">Nariz</div>
+                </div>
+                <div class="vocab-card head">
+                    <div class="vocab-icon">👂</div>
+                    <div class="vocab-english">Ear</div>
+                    <div class="vocab-spanish">Oído</div>
+                </div>
+                <div class="vocab-card head">
+                    <div class="vocab-icon">👄</div>
+                    <div class="vocab-english">Mouth</div>
+                    <div class="vocab-spanish">Boca</div>
+                </div>
+                <div class="vocab-card head">
+                    <div class="vocab-icon">😁</div>
+                    <div class="vocab-english">Teeth</div>
+                    <div class="vocab-spanish">Dientes</div>
+                </div>
+                <div class="vocab-card head">
+                    <div class="vocab-icon">💇</div>
+                    <div class="vocab-english">Hair</div>
+                    <div class="vocab-spanish">Cabello</div>
+                </div>
+            </div>
+
+            <h3 style="color: #667eea; margin: 30px 0 15px 0;">Partes del Cuerpo - Body Parts</h3>
+            <div class="vocabulary-grid" id="bodyVocab">
+                <div class="vocab-card body">
+                    <div class="vocab-icon">🤲</div>
+                    <div class="vocab-english">Hand</div>
+                    <div class="vocab-spanish">Mano</div>
+                </div>
+                <div class="vocab-card body">
+                    <div class="vocab-icon">🦵</div>
+                    <div class="vocab-english">Leg</div>
+                    <div class="vocab-spanish">Pierna</div>
+                </div>
+                <div class="vocab-card body">
+                    <div class="vocab-icon">🦶</div>
+                    <div class="vocab-english">Foot</div>
+                    <div class="vocab-spanish">Pie</div>
+                </div>
+                <div class="vocab-card body">
+                    <div class="vocab-icon">💪</div>
+                    <div class="vocab-english">Arm</div>
+                    <div class="vocab-spanish">Brazo</div>
+                </div>
+                <div class="vocab-card body">
+                    <div class="vocab-icon">❤️</div>
+                    <div class="vocab-english">Heart</div>
+                    <div class="vocab-spanish">Corazón</div>
+                </div>
+                <div class="vocab-card body">
+                    <div class="vocab-icon">🫀</div>
+                    <div class="vocab-english">Belly</div>
+                    <div class="vocab-spanish">Barriga</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Actividad: Emparejar -->
+        <div id="matching" class="activity-section">
+            <button class="back-btn" onclick="goBack()">← Volver</button>
+            <h2 style="color: #667eea; margin-bottom: 20px;">🎮 Emparejar - Matching Game</h2>
+            <p style="color: #666; margin-bottom: 20px; font-size: 1.1em;">¡Haz clic en una palabra en inglés y luego en su traducción en español!</p>
+            
+            <div class="progress" id="matchingProgress"></div>
+
+            <div class="matching-container">
+                <div>
+                    <div class="label">INGLÉS - English</div>
+                    <div class="matching-column" id="englishWords"></div>
+                </div>
+                <div>
+                    <div class="label">ESPAÑOL - Spanish</div>
+                    <div class="matching-column" id="spanishWords"></div>
+                </div>
+            </div>
+
+            <button class="submit-btn" onclick="resetMatching()">Jugar de Nuevo</button>
+        </div>
+
+        <!-- Actividad: Quiz -->
+        <div id="quiz" class="activity-section">
+            <button class="back-btn" onclick="goBack()">← Volver</button>
+            <h2 style="color: #667eea; margin-bottom: 20px;">❓ Quiz - Test Your Knowledge!</h2>
+            
+            <div class="progress" id="quizProgress"></div>
+
+            <div class="quiz-question">
+                <div class="question-text" id="questionText"></div>
+                <div class="question-image" id="questionImage"></div>
+                <div class="quiz-options" id="quizOptions"></div>
+            </div>
+
+            <div class="feedback" id="quizFeedback"></div>
+            <button class="submit-btn" onclick="nextQuestion()" id="nextBtn" style="display: none;">Siguiente →</button>
+        </div>
+
+        <!-- Actividad: Dibujar -->
+        <div id="drawing" class="activity-section">
+            <button class="back-btn" onclick="goBack()">← Volver</button>
+            <h2 style="color: #667eea; margin-bottom: 20px;">🎨 Actividad de Cuerpo</h2>
+            <p style="color: #666; margin-bottom: 20px; font-size: 1.1em;">¡Haz clic en la parte del cuerpo que se muestra!</p>
+
+            <div class="drawing-section">
+                <div class="body-drawing" id="bodyDrawing" onclick="handleBodyClick()">🧍</div>
+                <div id="partDisplay"></div>
+            </div>
+
+            <div class="feedback" id="drawingFeedback"></div>
+            <button class="submit-btn" onclick="nextBodyPart()">Siguiente Parte</button>
+        </div>
+    </div>
+
+    <script>
+        const vocabulary = {
+            face: [
+                { eng: 'Eye', spa: 'Ojo', emoji: '👀' },
+                { eng: 'Nose', spa: 'Nariz', emoji: '👃' },
+                { eng: 'Ear', spa: 'Oído', emoji: '👂' },
+                { eng: 'Mouth', spa: 'Boca', emoji: '👄' },
+                { eng: 'Teeth', spa: 'Dientes', emoji: '😁' },
+                { eng: 'Hair', spa: 'Cabello', emoji: '💇' }
+            ],
+            body: [
+                { eng: 'Hand', spa: 'Mano', emoji: '🤲' },
+                { eng: 'Leg', spa: 'Pierna', emoji: '🦵' },
+                { eng: 'Foot', spa: 'Pie', emoji: '🦶' },
+                { eng: 'Arm', spa: 'Brazo', emoji: '💪' },
+                { eng: 'Heart', spa: 'Corazón', emoji: '❤️' },
+                { eng: 'Belly', spa: 'Barriga', emoji: '🫀' }
+            ]
+        };
+
+        const allVocab = [...vocabulary.face, ...vocabulary.body];
+        let matchingState = { selected: null, pairs: [] };
+        let quizState = { index: 0, correct: 0, questions: [] };
+        let drawingState = { index: 0, correct: 0 };
+
+        function startActivity(activity) {
+            document.querySelectorAll('.activity-section').forEach(el => el.classList.remove('active'));
+            document.getElementById(activity).classList.add('active');
+
+            if (activity === 'matching') initMatching();
+            if (activity === 'quiz') initQuiz();
+            if (activity === 'drawing') initDrawing();
+        }
+
+        function goBack() {
+            document.querySelectorAll('.activity-section').forEach(el => el.classList.remove('active'));
+            document.getElementById('menu').classList.add('active');
+        }
+
+        // Matching Game
+        function initMatching() {
+            matchingState = { selected: null, pairs: [] };
+            const shuffled = [...allVocab].sort(() => Math.random() - 0.5);
+            const englishContainer = document.getElementById('englishWords');
+            const spanishContainer = document.getElementById('spanishWords');
+            
+            englishContainer.innerHTML = '';
+            spanishContainer.innerHTML = '';
+
+            shuffled.forEach((word, index) => {
+                const engBtn = document.createElement('div');
+                engBtn.className = 'matching-item';
+                engBtn.textContent = word.eng;
+                engBtn.dataset.index = index;
+                engBtn.onclick = () => selectMatchingItem(engBtn, 'eng');
+                englishContainer.appendChild(engBtn);
+
+                const spaBtn = document.createElement('div');
+                spaBtn.className = 'matching-item';
+                spaBtn.textContent = word.spa;
+                spaBtn.dataset.index = index;
+                spaBtn.onclick = () => selectMatchingItem(spaBtn, 'spa');
+                spanishContainer.appendChild(spaBtn);
+            });
+
+            updateMatchingProgress();
+        }
+
+        function selectMatchingItem(element, type) {
+            if (element.classList.contains('correct')) return;
+
+            document.querySelectorAll('.matching-item').forEach(el => {
+                if (!el.classList.contains('correct')) el.classList.remove('selected');
+            });
+
+            element.classList.add('selected');
+
+            if (matchingState.selected && matchingState.selected.type !== type) {
+                const selectedIndex = parseInt(element.dataset.index);
+                const prevIndex = parseInt(matchingState.selected.element.dataset.index);
+
+                if (selectedIndex === prevIndex) {
+                    element.classList.add('correct');
+                    matchingState.selected.element.classList.add('correct');
+                    matchingState.pairs.push(selectedIndex);
+                    matchingState.selected = null;
+
+                    if (matchingState.pairs.length === allVocab.length) {
+                        setTimeout(() => {
+                            alert('¡🎉 ¡Excelente! ¡Lo hiciste perfecto!');
+                            initMatching();
+                        }, 500);
+                    }
+                    updateMatchingProgress();
+                } else {
+                    matchingState.selected = { element, type };
+                }
+            } else {
+                matchingState.selected = { element, type };
+            }
+        }
+
+        function updateMatchingProgress() {
+            document.getElementById('matchingProgress').textContent = 
+                `Parejas correctas: ${matchingState.pairs.length} / ${allVocab.length}`;
+        }
+
+        function resetMatching() {
+            initMatching();
+        }
+
+        // Quiz
+        function initQuiz() {
+            quizState = { index: 0, correct: 0, questions: generateQuizQuestions() };
+            showQuizQuestion();
+        }
+
+        function generateQuizQuestions() {
+            return allVocab.map(word => {
+                const wrong = allVocab.filter(w => w.eng !== word.eng).sort(() => Math.random() - 0.5).slice(0, 3);
+                const options = [word.spa, ...wrong.map(w => w.spa)].sort(() => Math.random() - 0.5);
+                return { question: word.eng, emoji: word.emoji, correct: word.spa, options, spa: word.spa };
+            }).sort(() => Math.random() - 0.5);
+        }
+
+        function showQuizQuestion() {
+            if (quizState.index >= quizState.questions.length) {
+                showQuizResult();
+                return;
+            }
+
+            const q = quizState.questions[quizState.index];
+            document.getElementById('questionText').textContent = `¿Cuál es el significado de "${q.question}"?`;
+            document.getElementById('questionImage').textContent = q.emoji;
+            document.getElementById('quizProgress').textContent = `Pregunta ${quizState.index + 1} de ${quizState.questions.length}`;
+            document.getElementById('quizFeedback').classList.remove('show', 'correct', 'incorrect');
+            document.getElementById('nextBtn').style.display = 'none';
+
+            const optionsContainer = document.getElementById('quizOptions');
+            optionsContainer.innerHTML = '';
+
+            q.options.forEach(option => {
+                const btn = document.createElement('div');
+                btn.className = 'quiz-option';
+                btn.textContent = option;
+                btn.onclick = () => answerQuiz(btn, option, q.correct);
+                optionsContainer.appendChild(btn);
+            });
+        }
+
+        function answerQuiz(element, selected, correct) {
+            document.querySelectorAll('.quiz-option').forEach(el => el.style.pointerEvents = 'none');
+
+            const feedback = document.getElementById('quizFeedback');
+            if (selected === correct) {
+                element.classList.add('correct');
+                feedback.classList.add('show', 'correct');
+                feedback.textContent = '¡Correcto! 🎉';
+                quizState.correct++;
+            } else {
+                element.classList.add('incorrect');
+                document.querySelectorAll('.quiz-option').forEach(el => {
+                    if (el.textContent === correct) el.classList.add('correct');
+                });
+                feedback.classList.add('show', 'incorrect');
+                feedback.textContent = `Incorrecto. La respuesta es: ${correct}`;
+            }
+
+            document.getElementById('nextBtn').style.display = 'block';
+        }
+
+        function nextQuestion() {
+            quizState.index++;
+            showQuizQuestion();
+        }
+
+        function showQuizResult() {
+            const percentage = Math.round((quizState.correct / quizState.questions.length) * 100);
+            alert(`¡Terminaste! Acertaste ${quizState.correct} de ${quizState.questions.length} (${percentage}%)`);
+            initQuiz();
+        }
+
+        // Drawing Activity
+        function initDrawing() {
+            drawingState = { index: 0, correct: 0 };
+            nextBodyPart();
+        }
+
+        function nextBodyPart() {
+            if (drawingState.index >= allVocab.length) {
+                alert(`¡Completaste! Acertaste ${drawingState.correct} de ${allVocab.length} partes`);
+                initDrawing();
+                return;
+            }
+
+            const word = allVocab[drawingState.index];
+            document.getElementById('partDisplay').innerHTML = `
+                <div class="part-highlight">
+                    ${word.eng} - ${word.spa}
+                </div>
+            `;
+            document.getElementById('drawingFeedback').classList.remove('show');
+            drawingState.index++;
+        }
+
+        function handleBodyClick() {
+            const feedback = document.getElementById('drawingFeedback');
+            feedback.classList.add('show', 'correct');
+            feedback.textContent = '¡Muy bien! ¡Correcto! 🌟';
+            drawingState.correct++;
+        }
+    </script>
+</body>
+</html>
